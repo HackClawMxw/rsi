@@ -1,0 +1,29 @@
+{
+  "run_id": "qwen38_20261024_1",
+  "skill_anchor": "ascendbot@a2eabdd",
+  "model": "Qwen3.8",
+  "stages": {
+    "S1": null,
+    "S2": null,
+    "S3": null,
+    "S4": null
+  },
+  "total_span_seconds": null,
+  "human_wait_seconds": null,
+  "authorization_windows_seconds": 63375,
+  "signature_hits": null,
+  "rework_rounds": null,
+  "friction_count": 19,
+  "outcome": "signed",
+  "source_tracker": "/Users/cx/Desktop/code/agent/sessions/qwen38-20261024-1/",
+  "notes": "事后挖账（run 先于契约）。63375s=17:36:15 授权整窗，来自 AscendBot day0-cost-closure 文档（实测口径）；其同文档给出的 23:25:33.907 为剔除授权窗后的比较基线，raw 跨度无起止记录故留 null。friction_count 见下。 friction_count=19（候选实际块数；'处置状态'字符串仅 18 处，启动 owner 条目未带该短语）。",
+  "extraction": {
+    "events_total": null,
+    "events_parsed": null,
+    "events_skipped": null,
+    "span_human": null,
+    "wait_candidates": [],
+    "friction_source": "sessions/qwen38-20261024-1/evidence/self-evolving.md",
+    "stage_outcome_source": "sessions/qwen38-20261024-1/closeout.md"
+  }
+}

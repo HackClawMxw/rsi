@@ -1,0 +1,952 @@
+{
+  "run_id": "qwen_next_20261024_1",
+  "skill_anchor": null,
+  "model": "Qwen4ExpForConditionalGeneration",
+  "stages": {
+    "S1": {
+      "status": "fail",
+      "seconds": null
+    },
+    "S2": {
+      "status": "skipped",
+      "seconds": null
+    },
+    "S3": {
+      "status": "skipped",
+      "seconds": null
+    },
+    "S4": {
+      "status": "skipped",
+      "seconds": null
+    }
+  },
+  "total_span_seconds": 33482,
+  "human_wait_seconds": null,
+  "authorization_windows_seconds": null,
+  "signature_hits": {
+    "SIG-001": 0,
+    "SIG-002": 0,
+    "SIG-039": 0,
+    "SIG-040": 0,
+    "SIG-011": 0,
+    "SIG-005": 0,
+    "SIG-007": 0,
+    "SIG-008": 0,
+    "SIG-028": 0,
+    "SIG-030": 0,
+    "SIG-013": 0,
+    "SIG-006": 0,
+    "SIG-029": 0,
+    "SIG-038": 0,
+    "SIG-003": 0,
+    "SIG-010": 0,
+    "SIG-012": 0,
+    "SIG-014": 0,
+    "SIG-009": 0,
+    "SIG-004": 0,
+    "SIG-016": 0,
+    "SIG-031": 0,
+    "SIG-032": 0,
+    "SIG-033": 0,
+    "SIG-034": 0,
+    "SIG-035": 0,
+    "SIG-015": 0,
+    "SIG-019": 0,
+    "SIG-020": 0,
+    "SIG-021": 0,
+    "SIG-027": 0,
+    "SIG-024": 0,
+    "SIG-017": 0,
+    "SIG-018": 0,
+    "SIG-023": 0,
+    "SIG-025": 0,
+    "SIG-026": 0,
+    "SIG-036": 0,
+    "SIG-037": 0,
+    "SIG-022": 0
+  },
+  "rework_rounds": null,
+  "friction_count": null,
+  "outcome": "aborted",
+  "source_tracker": "/home/hackclaw/qwen-next/vllm-ascend/.day0/Qwen4ExpForConditionalGeneration_20261024_1/tracker.md（服务器）",
+  "notes": "事后挖账（run 先于契约）。时间来自本地报告 adaptation-phase-timing.csv（实测，源为 Codex 会话 jsonl），共 174 个 phase；终点=本轮回合结束待用户选择，终态=终止（用户确认放弃）。skill_anchor 未知（Codex 侧执行，版本未锚）留 null。细节见 sessions/qwen-next-run-report-20261026/report.md。 signature_hits 仅基于 remote-log-excerpts.md（191 行摘录，完整服务日志在服务器）：40 签名全零命中。",
+  "extraction": {
+    "events_total": 174,
+    "events_parsed": 174,
+    "events_skipped": 0,
+    "span_human": "9:18:02",
+    "wait_candidates": [],
+    "phases": [
+      {
+        "phase": "环境、容器和立项安装",
+        "wall_s": 813.223,
+        "note": "包含 CMake 缓存路径错误后的重建"
+      },
+      {
+        "phase": "依赖扫描、范围判定和设计入口",
+        "wall_s": 364.614,
+        "note": "G0/P2 判定；不含后续设计"
+      },
+      {
+        "phase": "分层设计及主控签收",
+        "wall_s": 1552.584,
+        "note": "含两名只读探查的并行窗口，不能累加子代理跨度"
+      },
+      {
+        "phase": "实现、整合及首轮用卡前准备",
+        "wall_s": 2664.914,
+        "note": "包含两次设计契约返修、CPU/meta 测试及重装"
+      },
+      {
+        "phase": "NPU离线及HTTP dummy验证与返工",
+        "wall_s": 2993.761,
+        "note": "里程碑窗口，含8轮离线尝试及HTTP；并非设备精确占用；dummy通过不代表G1正式签收"
+      },
+      {
+        "phase": "交付收口与G1/G2主控复核",
+        "wall_s": 341.298,
+        "note": "G1/G2主控确认通过；不等同正式R1通过"
+      },
+      {
+        "phase": "正式R1首轮审计",
+        "wall_s": 313.708,
+        "note": "首轮退回两项证据缺口；包含必要审计，不等同全部可避免返工"
+      },
+      {
+        "phase": "R1限定CPU补证、封存及复审",
+        "wall_s": 743.625,
+        "note": "两项补证闭环，原Auditor正式复审通过；包含A17隔离返工，不能全部认定可避免"
+      },
+      {
+        "phase": "Tester交接、正式T0和减层启动准备",
+        "wall_s": 137.013,
+        "note": "包含主控签收/调度、双仓editable重装与环境卫生；T0完成回读17:30:57；实际后台安装起止不全"
+      },
+      {
+        "phase": "真实权重首次失败、派生载体及重试准备",
+        "wall_s": 624.7,
+        "note": "含1次真实启动失败、31.029秒派生程序自计时、5版CPU参数校验及第二次T0；非纯设备占用"
+      },
+      {
+        "phase": "真实权重第二次加载及HTTP请求验证",
+        "wall_s": 147.069,
+        "note": "ready及请求200/非空输出；不等同精度或G3a正式签收"
+      },
+      {
+        "phase": "减层服务善后定界及G3a签收",
+        "wall_s": 324.986,
+        "note": "UNKNOWN原文保留；只读证据和主控接受，无补杀；G3a功能签收不代表精度"
+      },
+      {
+        "phase": "G3b交接、第三次T0及全层启动准备",
+        "wall_s": 181.91,
+        "note": "原始48层checkpoint；环境冻结后并发CPU参考；含必要交接和重装"
+      },
+      {
+        "phase": "全层NPU加载至ready与CPU参考并行启动",
+        "wall_s": 196.712,
+        "note": "NPU原48层ready与sanity通过；CPU参考已加载，首题仍在生成；非精度结论"
+      },
+      {
+        "phase": "全层功能、文本采集与CPU首题等待",
+        "wall_s": 391.446,
+        "note": "单图/双图通过，视频异常待定位；CPU首题产出后greedy精度FAIL。并行窗口不累计角色时间"
+      },
+      {
+        "phase": "全层精度分歧、首批复现及立案门禁检查",
+        "wall_s": 558.264,
+        "note": "前三题FAIL；001三次序列不自洽，转换拒绝；与CPU/视频排查并行"
+      },
+      {
+        "phase": "立案拒绝后等待、隔离复现与短前缀诊断",
+        "wall_s": 983.864,
+        "note": "原raw/隔离/短前缀结果收口，G3b仍FAIL；主控转稳定性诊断，非故障恢复"
+      },
+      {
+        "phase": "稳定性路由、环境核对及九次单步定位",
+        "wall_s": 234.005,
+        "note": "环境/采样链及API协议准备与9次HTTP并行分析；HTTP仅22.039秒，阶段差额不能全计浪费"
+      },
+      {
+        "phase": "单步结果复核、观测hook开发检查及签收",
+        "wall_s": 634.757,
+        "note": "观测工具开发/6项stdlib检查/非空覆盖收口；真实框架运行兼容性未验证，CPU拷贝可能扰动时序"
+      },
+      {
+        "phase": "原全层停止、显存释放复核与第四次T0",
+        "wall_s": 167.327,
+        "note": "含stop INCOMPLETE→只读接受约69秒、环境重装与卫生核验；不能全计设备停机或纯浪费"
+      },
+      {
+        "phase": "第四次真实权重观测服务加载",
+        "wall_s": 132.739,
+        "note": "原48层带hook服务ready、8rank安装身份通过；准备三次请求，不等于精度通过"
+      },
+      {
+        "phase": "三次观测请求与严格24capture覆盖校验",
+        "wall_s": 34.851,
+        "note": "3次HTTP合计10.846712秒，24capture覆盖PASS；生成token一致但内部hash变化，非G3b PASS"
+      },
+      {
+        "phase": "首轮观测边界、metadata复核及结果封存",
+        "wall_s": 109.752,
+        "note": "层0 combine输入已变；汇总49层是哨兵口径，已更正；真实fresh标记记录，根因待证"
+      },
+      {
+        "phase": "第二轮第0层细化观测开发准备",
+        "wall_s": 535.133,
+        "note": "13模块+6方法/8项stdlib测试交付及主控授权；18:57:47交回，实际运行分支覆盖尚未证明"
+      },
+      {
+        "phase": "第一轮观测服务停止、UNKNOWN只读释放与第五次T0",
+        "wall_s": 145.696,
+        "note": "停止身份UNKNOWN至接受55.260秒；T0/START均0，launch确切时刻仅在19:01:02–07内"
+      },
+      {
+        "phase": "第五次真实服务加载回读至安装ready",
+        "wall_s": 131.788,
+        "note": "由start成功回读计131.788秒；真实start在此前命令窗口内，提交至ready观察窗口131.788–136.548秒；helper自计115.107"
+      },
+      {
+        "phase": "第二轮三次请求与严格覆盖失败回读",
+        "wall_s": 21.944,
+        "note": "3HTTP合计8.438416秒；24capture缺一个方法in/out，validator1、外层0，不算24次失败"
+      },
+      {
+        "phase": "第二轮缺项诊断、局部边界分析及封存",
+        "wall_s": 87.57,
+        "note": "严格FAIL保留；16对照局部最早变化out_proj输出，输入相同；局部证据不冒充完整覆盖"
+      },
+      {
+        "phase": "第三轮路径补齐与投影内部观测准备",
+        "wall_s": 564.194,
+        "note": "第三版gate入口修复及GEMM/TP归约内部观测开发、10项工具测试、封存签收；并行停止/释放/T0，不能另加子角色墙钟"
+      },
+      {
+        "phase": "第三版授权后复核资源、冻结文件与第六次启动",
+        "wall_s": 34.268,
+        "note": "51文件复核/START_EXIT0；真实launch在19:15:02–07命令内，非精确进程启动时刻"
+      },
+      {
+        "phase": "第六次真实服务第三版hook加载观察",
+        "wall_s": 103.192,
+        "note": "加载至首回读RuntimeError：实际GroupCoordinatorPatch不符工具合约；installed0；不是ready"
+      },
+      {
+        "phase": "第三版安装失败诊断、资源释放与第四版开发交回",
+        "wall_s": 229.555,
+        "note": "源码确认补丁类继承方法；资源先释放，readiness仍活；与第四版12项工具测试并行，含必要定位"
+      },
+      {
+        "phase": "第四版交回后旧readiness等待、身份核验及单PID取消",
+        "wall_s": 245.146,
+        "note": "旧探针阻止新服务；交回至取消245秒含复核/调度，不作为净可省时间；exit不可观测"
+      },
+      {
+        "phase": "探针清理后资源复核与第四版最终授权",
+        "wall_s": 64.295,
+        "note": "只读preflight正常/端口释放；first19+second18+third14+fourth11冻结核验；尚无新启动"
+      },
+      {
+        "phase": "第四版授权后新T0/启动准备",
+        "wall_s": 161.069,
+        "note": "完整T0/卫生exit0、新资源核验与第7次启动；含61秒Tester压缩和只读plan路径更正，后台T0并行"
+      },
+      {
+        "phase": "第七次真实服务第四版加载至8rank安装ready",
+        "wall_s": 131.684,
+        "note": "8actual/8installed/21边界门禁PASS；readiness预算360，helper自计114.959秒/真实exit0"
+      },
+      {
+        "phase": "第四轮请求前参考路径失败、零请求补证及重审",
+        "wall_s": 148.804,
+        "note": "首helper0HTTP退出，错误路径更正后自动审批曾拒，零采样补证通过；约2分钟不是纯审批延迟"
+      },
+      {
+        "phase": "第四轮唯一三次请求与24capture严格覆盖恢复",
+        "wall_s": 23.794,
+        "note": "请求helper真实3次、exit0；24capture/21边界PASS；HTTP逐次elapsed未从现有短回读证实"
+      },
+      {
+        "phase": "第四轮TP归约内部矩阵核对与结果封存",
+        "wall_s": 125.25,
+        "note": "16同rank重复对照local均稳、归约出口变；不据此断言具体通信内核缺陷"
+      },
+      {
+        "phase": "HCCL确定性单变量对照授权与生命周期准备",
+        "wall_s": 213.784,
+        "note": "第四服务stop UNKNOWN→独立释放、完整T0与strict启动前校验；仅HCCL变量改变，原hook/参考复用"
+      },
+      {
+        "phase": "第八次真实服务HCCL strict加载至ready/安装门禁",
+        "wall_s": 125.993,
+        "note": "8worker实际strict、LCCL0/torchfalse等其余关键条件不变；readiness111.805秒/真实exit0"
+      },
+      {
+        "phase": "strict唯一三请求/24capture严格检查",
+        "wall_s": 40.314,
+        "note": "prelaunch零请求/参考hash验证，3请求输出1710x3，24capture/errors0；非正式G3b"
+      },
+      {
+        "phase": "strict重复与基线对照矩阵核对及封存",
+        "wall_s": 56.613,
+        "note": "16within稳定；24baseline-control local同而reduceout不同；API/routing稳定，有限单变量效应"
+      },
+      {
+        "phase": "配置修复交付、诊断服务清理与影响审计准备",
+        "wall_s": 404.597,
+        "note": "诊断服务清理及配置包交付/G1补证签收；11manifest成员、机械10/10；含主控压缩100.685秒；阶段闭合但非正式精度通过"
+      },
+      {
+        "phase": "配置影响R1审计与正式复验协议准备",
+        "wall_s": 190.392,
+        "note": "影响R1仅C01退回；Tester原5题greedy128/最多15串行请求只读准备完成，无新服务或请求；角色并行不相加"
+      },
+      {
+        "phase": "C01最小契约与静态证据补充",
+        "wall_s": 409.438,
+        "note": "闭合；最小8成员补包/12机械checks通过，torch实际未观测/有限静态推断；G1和正式C01复核PASS"
+      },
+      {
+        "phase": "正式签收派发、完整T0和第九次无hook启动准备",
+        "wall_s": 133.588,
+        "note": "主控书面派发；T0exit0，8目标芯片健康空闲，无冲突等待证据；collector准备未启动"
+      },
+      {
+        "phase": "第九次真实服务无hook加载至启动签名检查",
+        "wall_s": 139.126,
+        "note": "READY文件已完成/exit0前置；helper同钟111.890159秒；后续签名环境断言失败，尚无模型请求"
+      },
+      {
+        "phase": "无hook环境取证缺口与请求暂停",
+        "wall_s": 263.979,
+        "note": "第9服务观测不足零请求封存清理；停止UNKNOWN，独立释放核验含快照hash假设返工后接受；未完成模型精度"
+      },
+      {
+        "phase": "SPT观察配置补包与双CPU探针至G1签收",
+        "wall_s": 299.236,
+        "note": "依赖CPU双子进程验证proc保留/标题截断；机械路径首失败后15PASS/17文件；含Developer压缩57.919秒"
+      },
+      {
+        "phase": "SPT观察配置影响R1复核",
+        "wall_s": 67.762,
+        "note": "正式受影响R1PASS，原15exact与8worker实际签名仍需新运行验证"
+      },
+      {
+        "phase": "SPT正式书面派发与新一轮T0",
+        "wall_s": 137.609,
+        "note": "闭合；正式书面派发/完整T0exit0，目标8卡健康空闲；第10次普通无hook真实启动，SPT1观察配置"
+      },
+      {
+        "phase": "第十次无hookstrict+SPT加载与实际签名取证",
+        "wall_s": 118.682,
+        "note": "helper同钟103.039443秒/budget360，runtime checker0/errors[]；API/Engine/8worker身份链及al"
+      },
+      {
+        "phase": "独立sanity与固定15请求collector提交",
+        "wall_s": 18.157,
+        "note": "sanity独立HTTP200；固定原五题各3串行greedy128，正式采集开始，不改变判据"
+      },
+      {
+        "phase": "固定15正式串行精度采集",
+        "wall_s": 544.232,
+        "note": "闭合；固定15全部完成，5题3重复自身稳，CPU1/5题通过，原输入全exact；collectorexit0不等于精度PASS"
+      },
+      {
+        "phase": "探针转换、停止与独立释放裁决",
+        "wall_s": 108.732,
+        "note": "L2FAIL探针生成，11SIGTERM后UNKNOWN，9Z2gone/端口/8卡释放；与主控98.525秒压缩重叠"
+      },
+      {
+        "phase": "原始15复核与新稳定证据实际立案",
+        "wall_s": 36.256,
+        "note": "主控独立exact3/selfsameTrue；005稳定立案inner0/outer0，未新增模型请求"
+      },
+      {
+        "phase": "交付封存、packet前后身份归档与专项委派",
+        "wall_s": 72.197,
+        "note": "156成员封存；handoff默认回填引用，前后hash及明确恢复归档保留；20:32:00新专项agent"
+      },
+      {
+        "phase": "RCABot既有文件诊断与CPU两步采集计划准备",
+        "wall_s": 381.636,
+        "note": "闭合；CPU两步计划、授权、资源/身份预检至唯一诊断模型进程实际启动；msProbe能力预查并行"
+      },
+      {
+        "phase": "E1 CPU005两步三重复诊断运行与退出回读",
+        "wall_s": 117.956,
+        "note": "程序内elapsed90.081秒；本地启动→退出回读窗口另计；3重复全部97237/96719；与msProbe能力/源码分析并行"
+      },
+      {
+        "phase": "CPU300张量验证、报告封存和交付",
+        "wall_s": 60.173,
+        "note": "300文件/100对应状态跨三重复全元素一致；资源无触发、进程全退；不代表G3bPASS"
+      },
+      {
+        "phase": "NPU对齐准备：msProbe下载阻塞及并行源码定位",
+        "wall_s": 633.825,
+        "note": "下载子阻塞闭合：4次已结束失败，四段并行Range成功并校验官方SHA；期间源码/采集语义检查并行，无新NPU模型请求"
+      },
+      {
+        "phase": "有效wheel独立复核与离线API/依赖/采集语义审查",
+        "wall_s": 583.481,
+        "note": "闭合；SDK真实API/导入链及4必要依赖闭包审查；依赖下载170.224秒成功并行于配置/toy工具代码审查；2只读解析/路径返工，无模型重跑"
+      },
+      {
+        "phase": "五wheel独立复核、导入/toy门禁代码修订与安装授权",
+        "wall_s": 132.53,
+        "note": "前4版工具中的退出码缺陷在执行前修正，未形成失败实验；五包CRC/SHA/closure复核并行，无模型计算"
+      },
+      {
+        "phase": "SDK任务目录安装资源检查至完成",
+        "wall_s": 73.391,
+        "note": "此前子角色尾段已纳入当前根覆盖；5指定包sdk-site安装exit0，base前后相同"
+      },
+      {
+        "phase": "安装核验、完整T0执行及健康空闲回读",
+        "wall_s": 127.579,
+        "note": "base294diff[]，T0exit0；主控压缩122.176秒与安装核验/T0重叠"
+      },
+      {
+        "phase": "原生SDK导入与CPUtoy两步前置门禁",
+        "wall_s": 77.123,
+        "note": "唯一执行wrapper19.111秒，2steps/8BF16 tensors，初始化trap0；主控独立接受；不能算CPU模型采集"
+      },
+      {
+        "phase": "逐层采集封包/原始reader审查授权与交付收口",
+        "wall_s": 259.429,
+        "note": "17文件采集包审查、两服务顺序协议；Tester169.059秒压缩，主控/RCA并行推进；2shell错误已恢复"
+      },
+      {
+        "phase": "无dump控制服务前第二次完整T0",
+        "wall_s": 46.807,
+        "note": "本地回读窗口；按流程再次editable重建，T0exit0后才真正launch，非NPU重复失败"
+      },
+      {
+        "phase": "第11服务加载就绪、无dump控制3请求及唯一停止",
+        "wall_s": 163.648,
+        "note": "ready程序121.857秒；3个两token结果完全等于预期NPU；停止inner1，精度原FAIL不改"
+      },
+      {
+        "phase": "第11服务身份UNKNOWN后的只读释放核验",
+        "wall_s": 47.723,
+        "note": "闭合；原UNKNOWN保留，主控独立9Z2gone/port拒绝/8健康空闲，无补信号"
+      },
+      {
+        "phase": "第12采集服务前完整T0、资源检查及真正启动",
+        "wall_s": 59.29,
+        "note": "T0于21:17:14启动、21:18:02回读0并launch；原源码/env复用，加入审查后的dump_config"
+      },
+      {
+        "phase": "第12真实加载、SDK3请求采集和原始索引",
+        "wall_s": 171.864,
+        "note": "ready程序122.723秒，3请求均expectedNPU；48metadata/7152records/0indexerror；SSH单连接75秒超时与成"
+      },
+      {
+        "phase": "采集服务停止UNKNOWN后的独立释放",
+        "wall_s": 12.354,
+        "note": "原UNKNOWN保留；9Z2gone/端口拒绝/8健康空闲通过；本次reason/detail未导出，签名不自动归类"
+      },
+      {
+        "phase": "单个真实NPU序列化张量官方CPU重建门禁",
+        "wall_s": 68.624,
+        "note": "单次guarded官方CPU remap wrapper27.756秒，exit0/finiteBF16/no init；不加载模型"
+      },
+      {
+        "phase": "既有原始张量NumPy批量数值比较与主控确认",
+        "wall_s": 82.703,
+        "note": "实际比较15.169秒；2400rows/1600repeatpairs/300rankgroups，无模型/NPU/torch导入；与Tester封存并行"
+      },
+      {
+        "phase": "首decoder内部候选分析及局部norm复用验证准备",
+        "wall_s": 311.702,
+        "note": "局部官方HCnorm输入/20KiB权重切片计划、工具审查授权和实际第一次启动；含交接plan路径读取返工"
+      },
+      {
+        "phase": "HCnorm局部CPU第一次执行：导入契约断言中止",
+        "wall_s": 27.898,
+        "note": "实际第二版工具，wrapper25.579秒/exit1/rows0，未读权重payload或执行norm，无全模型/NPU"
+      },
+      {
+        "phase": "官方导入链核对、观察契约修订与第四版授权",
+        "wall_s": 233.392,
+        "note": "third残留ban在审查前发现未执行，fourth允许native import+availability后再启动；不是第三次实验"
+      },
+      {
+        "phase": "HCnorm局部CPU第二次执行：profiler init误判中止",
+        "wall_s": 28.315,
+        "note": "实际第四版，wrapper25.508秒/exit1/rows0，host profiler环境读取init触发宽泛guard；无norm数值结果"
+      },
+      {
+        "phase": "guard误判定位、第五版精确修订准备",
+        "wall_s": 202.325,
+        "note": "第五版精确host callable、source哈希和关闭环境验证后单次启动；second/fourth失败仍保留"
+      },
+      {
+        "phase": "HCnorm局部CPU第三实际执行成功",
+        "wall_s": 55.923,
+        "note": "工具fifth，wrapper33.848s；leaf32.674s含导入/文件/三重复两相位计算，不是纯norm kernel耗时"
+      },
+      {
+        "phase": "HCnorm独立审查与全重复跨rank文件覆盖",
+        "wall_s": 67.275,
+        "note": "主控审查落盘21:38:51；RCA raw检查1.002s，48组144张量exact，不是48次模块执行"
+      },
+      {
+        "phase": "HCmix四leaf最小补采计划、审阅及派发",
+        "wall_s": 368.297,
+        "note": "复用PhaseB控制授权；包含主控138.985s压缩与子角色计划重叠，不计纯浪费；计划weight总byte数修订非实际读取失败"
+      },
+      {
+        "phase": "PhaseC执行准备与CPU HCmix源码审查",
+        "wall_s": 138.129,
+        "note": "Tester90.151秒与RCA104.241秒压缩重叠，随后真实T0启动，仍不算新服务"
+      },
+      {
+        "phase": "PhaseC完整T0与原控制复用条件核对",
+        "wall_s": 47.415,
+        "note": "无条件两树editable重装与新鲜空闲；T0 exit0回读6106，实际服务启动6111"
+      },
+      {
+        "phase": "第13服务四leaf启动、3请求采集与停止回读",
+        "wall_s": 137.851,
+        "note": "readiness121.475508秒；client0/CAPTUREPASS/stop1，非模型失败"
+      },
+      {
+        "phase": "PhaseC UNKNOWN自然退出与独立资源释放",
+        "wall_s": 37.641,
+        "note": "原2S1D8Z自然转9Z2gone、8卡健康空闲/portrefused，无追加信号；原因签名待证"
+      },
+      {
+        "phase": "PhaseC原始索引/ZIP审阅与CPU HCmix启动",
+        "wall_s": 40.093,
+        "note": "48metadata576文件/四leaf覆盖；复用匹配控制；CPU授权先完成、待释放后开始"
+      },
+      {
+        "phase": "官方CPU HCmix唯一实际执行与结果回读",
+        "wall_s": 45.307,
+        "note": "工具second、first未执行；leaf32.302225秒含导入/文件/三重复，不是纯GEMMlatency；exit0有数值差异"
+      },
+      {
+        "phase": "首HC投影数值定位审阅、封存与FP64参考授权",
+        "wall_s": 211.128,
+        "note": "投影不同仅定位边界；FP64独立参考计划/源码审查，并非已证明根因或修复"
+      },
+      {
+        "phase": "FP64 CPU局部参考执行及回读窗口",
+        "wall_s": 30.813,
+        "note": "FP64 wrapper0.516491s/leaf0.304706s；真实exit0后数值导出，支持本例NPU更近高精度，非正式oracle替换"
+      },
+      {
+        "phase": "CPU参考后端源码核对、FP64审阅与原生A/B准备",
+        "wall_s": 208.849,
+        "note": "独立数值方向复核；7200秒诊断预算真实续期；源码只读、无新增NPU，不能视作CPU计算耗时"
+      },
+      {
+        "phase": "原生MKLDNN开关A/B唯一实际进程与结果回读",
+        "wall_s": 30.512,
+        "note": "wrapper3.820264秒/leaf3.339622秒，12行对照，默认精确复现旧值/disabled改善；审查派发与回读包含在墙钟"
+      },
+      {
+        "phase": "A/B封存、完整CPU对照方案审阅与资源检查",
+        "wall_s": 232.73,
+        "note": "原生gemm:acl18日志/旧参考保留；唯一新CPU两步collector授权，原首token约束保留/不预设第二token"
+      },
+      {
+        "phase": "MKLDNN关闭的完整CPU三重复两步诊断运行",
+        "wall_s": 299.151,
+        "note": "三重复完整输出；collector288.061秒，log marker288.068秒口径另列，结果已写但此回读exit还PENDING"
+      },
+      {
+        "phase": "PhaseF真实exit0、300tensor SHA/bytes核验与封存",
+        "wall_s": 45.841,
+        "note": "watcher实际303.045771s、terminationFalse、330manifest/helpergone；不是额外模型计算"
+      },
+      {
+        "phase": "PhaseF封存后交接、RCA上下文恢复与raw校验回读",
+        "wall_s": 327.039,
+        "note": "含113.687s RCA压缩；rawleaf0.961583s/wrapper1.166242s，与交接/审查分开，净可省量未定"
+      },
+      {
+        "phase": "新CPU与既有NPU文件向量比对及局部后续授权",
+        "wall_s": 25.422,
+        "note": "2400行，NumPy分析15.093226s；与PhaseG授权/计划并行，无新NPU"
+      },
+      {
+        "phase": "校正前后数值审阅与PhaseG授权核对/启动准备",
+        "wall_s": 93.126,
+        "note": "已有2400行结果，核对条件与预算后实际启动；启动时点仅以回读界定"
+      },
+      {
+        "phase": "PhaseG CPU官方HCmix实际运行及退出回读",
+        "wall_s": 37.068,
+        "note": "leaf32.563602秒，启动→exit回读37.068秒；无NPU/全模型/SDK，非额外服务"
+      },
+      {
+        "phase": "PhaseG完成数值回读与封存",
+        "wall_s": 27.526,
+        "note": "官方三重复稳定/四权重rawexact；36成员manifest/helpersgone；不等同G3b PASS"
+      },
+      {
+        "phase": "PhaseG结果解释、PhaseH源码准备与两次文本断言返工",
+        "wall_s": 287.753,
+        "note": "两断言恢复24.010/7.818秒，均执行前；包含必要方案/源码/预算审查，无H实际运行"
+      },
+      {
+        "phase": "主控上下文压缩、PhaseH审查授权与启动准备",
+        "wall_s": 238.477,
+        "note": "含163.567秒主控压缩，与RCA准备重叠；22:27:37实际启动回读"
+      },
+      {
+        "phase": "PhaseH原生SDK CPU子模块采集及退出回读",
+        "wall_s": 54.331,
+        "note": "实际leaf37.167599秒/watcher40.359615秒，六次wholeHC与G exact；观测启动→exit54.331秒不作纯计算"
+      },
+      {
+        "phase": "PhaseH封存、实际路径索引与主控独立回读",
+        "wall_s": 63.609,
+        "note": "索引0.135394秒，6meta/54tensors；含宿主/容器路径错11.399秒恢复、reader预先替版，无新模型"
+      },
+      {
+        "phase": "PhaseH文件边界对齐、授权与结果回读",
+        "wall_s": 31.145,
+        "note": "仅THIRD一次实际分析，leaf0.833903秒/wrapper1.068306秒；不是新CPU/NPU模型"
+      },
+      {
+        "phase": "PhaseH机制解释、PhaseI包修正/替代授权与资源准备",
+        "wall_s": 248.102,
+        "note": "含readplan命名错、FIRST shape/dtype遗漏；FIRST从未执行，SECOND一次实际；另上游只读历史查询并行"
+      },
+      {
+        "phase": "PhaseI原生CPU六精度路径实际运行及退出回读",
+        "wall_s": 24.838,
+        "note": "leaf3.308411秒，3repeat×6arm稳定；观测24.838秒含wrapper/轮询，未测部分不当计算"
+      },
+      {
+        "phase": "PhaseI数值回读、helper清理与封存",
+        "wall_s": 35.733,
+        "note": "局部BF16复现CPU_G/FP32复现NPU，28成员manifest；无全网回归"
+      },
+      {
+        "phase": "PhaseI交付、J工具生成/审查与开发复验准备",
+        "wall_s": 249.174,
+        "note": "含J生成SyntaxError修复22.440秒；Developer与Tester只读准备并行；尚未新NPU/正式源码修复"
+      },
+      {
+        "phase": "PhaseJ授权后材料核对、Tester上下文恢复及资源预检",
+        "wall_s": 155.974,
+        "note": "授权→启动156秒左右，含Tester82.181秒压缩、RCA101.061秒部分重叠；开发准备并行，不作全净浪费"
+      },
+      {
+        "phase": "PhaseJ源码区段实际运行与exit回读",
+        "wall_s": 11.787,
+        "note": "leaf3.422498秒/watcher4.128115秒；四组×3exact，既非完整mix调用亦非整网验证"
+      },
+      {
+        "phase": "PhaseJ身份/数值校验、helper清理与封存",
+        "wall_s": 45.836,
+        "note": "35文件manifest，helpergone/source/base不变；不新增NPU服务"
+      },
+      {
+        "phase": "PhaseJ独立签收、规范诊断报告与最终修复交接",
+        "wall_s": 130.171,
+        "note": "专项诊断完成但G3bFAIL；候选副本同SHA归档后清理，正式树未改，交Developer修复"
+      },
+      {
+        "phase": "专项诊断签收后派发/开发锚点复核与正式补丁应用",
+        "wall_s": 99.24,
+        "note": "22:46:47正式源码已应用候选SHA，尚未G2/真实权重"
+      },
+      {
+        "phase": "HC补丁46项UT、旧4项预期失败与提交",
+        "wall_s": 100.595,
+        "note": "pytest自身2.75秒/旧负对照0.52秒；outer各22.618/19.717秒含导入，负对照失败不是执行故障"
+      },
+      {
+        "phase": "正式commit后T0/独立源码预审与46项UT复核",
+        "wall_s": 154.055,
+        "note": "最终版本46PASS/pytest2.70秒、outer23.961秒；源码预审无确定阻断不等于R1签收"
+      },
+      {
+        "phase": "G2配置构造与首次载体命令拒绝",
+        "wall_s": 52.074,
+        "note": "CONFIG_OK/CLASS_OK；FIRST缺--model-path、innerexit2无进程receipt，非HC模型FAIL"
+      },
+      {
+        "phase": "载体补参数、刷新T0与SECOND启动",
+        "wall_s": 95.775,
+        "note": "参数修正后一次实际启动；不能把FIRST版本当一次模型运行"
+      },
+      {
+        "phase": "SECOND spawn bootstrap故障、检测与受控释放",
+        "wall_s": 67.556,
+        "note": "RuntimeError缺__main__保护；PROBE2/3false/worker0，stop0/preflight0；窗口含启动/检测/停止非纯shut"
+      },
+      {
+        "phase": "THIRD入口重构、T0刷新与CPU重导入预检",
+        "wall_s": 85.757,
+        "note": "CPU __mp_main__无runtime导入/CLI路径消费PASS；第三次T0 exit0，正式dummy未启动"
+      },
+      {
+        "phase": "THIRD载体独立审查与实际恢复启动",
+        "wall_s": 111.857,
+        "note": "独立核对完整source/argv/hash/precheck及资源后实际启动；前两载体问题保留"
+      },
+      {
+        "phase": "修后offline-THIRD四层模型运行、取证与停止回读",
+        "wall_s": 101.097,
+        "note": "PROBE2/3PASS/2token/8rank实际身份；stop1UNKNOWN/preflight0；非精度验收"
+      },
+      {
+        "phase": "offline UNKNOWN后主控上下文恢复与独立资源快照",
+        "wall_s": 114.079,
+        "note": "主控118.289秒压缩与offline末段/开发准备重叠；Z/GONE端口111/8健康空闲；不将全窗算stop延迟"
+      },
+      {
+        "phase": "HTTP载体核验、刷新T0与实际启动",
+        "wall_s": 83.404,
+        "note": "HTTP T0 exit0；原安装CLI入口重导入预检；offline明确释放接受与此准备重叠"
+      },
+      {
+        "phase": "HTTP dummy就绪、唯一请求与停止回读",
+        "wall_s": 98.354,
+        "note": "READY实际82.084707秒；请求200非空非空白；stop1UNKNOWN，runtimePASS不等同G3"
+      },
+      {
+        "phase": "HTTP UNKNOWN只读资源独立裁决",
+        "wall_s": 33.545,
+        "note": "Z/GONE/port111/8健康无进程/preflight0，保留原UNKNOWN"
+      },
+      {
+        "phase": "固定证据时序FAIL及G1替代路径核证",
+        "wall_s": 166.727,
+        "note": "新G2实际输出复用，不重跑模型；checker仍FAIL，主控签署补充裁决"
+      },
+      {
+        "phase": "HC正式受影响R1核验至PASS报告",
+        "wall_s": 162.176,
+        "note": "复用封组预审；独立核最终身份/交付/矩阵/G2释放，报告7428B"
+      },
+      {
+        "phase": "R1报告交回与主控签收派发G3a",
+        "wall_s": 50.523,
+        "note": "含tracker机械断言失败/只读核对，不当实验失败"
+      },
+      {
+        "phase": "修后G3a准备及T0与602payload并行校验",
+        "wall_s": 134.181,
+        "note": "重用已有减层载体，validator程序28.810335s；与T0并行，不相加"
+      },
+      {
+        "phase": "T0完成至服务launch receipt回读",
+        "wall_s": 21.063,
+        "note": "包含helper提交、实际服务启动与回读，真实服务14确认"
+      },
+      {
+        "phase": "真实权重14启动身份核验及唯一请求PASS",
+        "wall_s": 115.089,
+        "note": "READY自身97.232936s，HTTP自身3.212605s；远端rg读取失败与加载重叠"
+      },
+      {
+        "phase": "G3a forward后受控停止至UNKNOWN回读",
+        "wall_s": 23.344,
+        "note": "原ctl stop一轮11TERM+API1KILL，identity UNKNOWN，与功能PASS分开"
+      },
+      {
+        "phase": "G3a停止UNKNOWN至主控独立资源释放接受",
+        "wall_s": 30.422,
+        "note": "原stop身份UNKNOWN保留；9Z2gone/port111/npu-smi无进程；非实际退出精确时间"
+      },
+      {
+        "phase": "G3a封存准备及全日志ERROR检查断言",
+        "wall_s": 29.28,
+        "note": "唯一前向已通过，关闭错误未按阶段区分导致报告阻断"
+      },
+      {
+        "phase": "加载与关闭错误分段核对及71成员报告封存",
+        "wall_s": 53.584,
+        "note": "A47纠正证据判定范围；未重跑模型；53.584s是观测/整理窗"
+      },
+      {
+        "phase": "主控71成员复核并正式签收G3a派G3b",
+        "wall_s": 58.436,
+        "note": "普通真实4层功能PASS，不销原全层精度欠账"
+      },
+      {
+        "phase": "全层固定15协议准备与完整T0",
+        "wall_s": 89.723,
+        "note": "原5body/5CPU参考/15wire hashes静态检查，唯一T0通过"
+      },
+      {
+        "phase": "全层T0后host启动至API receipt回读",
+        "wall_s": 24.436,
+        "note": "真实服务15，hosthelper不同于API实际起点"
+      },
+      {
+        "phase": "原48层131分片加载至READY与runtime核验",
+        "wall_s": 124.59,
+        "note": "8rank日志42.9961GB，READY自身115.500777s；静态协议复核与加载并行"
+      },
+      {
+        "phase": "全层独立sanity及固定15 collector启动",
+        "wall_s": 24.227,
+        "note": "sanity唯一200北京/7token，自身3.637190s，非正式exact结论"
+      },
+      {
+        "phase": "新001前两次完成首次稳定参考分歧",
+        "wall_s": 64.294,
+        "note": "两输出82token、input exact、div19，按原计划继续而非重试替代"
+      },
+      {
+        "phase": "新001第三次完成确认稳定参考FAIL",
+        "wall_s": 45.109,
+        "note": "三次自稳82token/div19，原同题120token/div9，不推断全局精度单调改善"
+      },
+      {
+        "phase": "新002三次参考FAIL收齐及并行返诊材料预备",
+        "wall_s": 122.85,
+        "note": "原002三次exact，本轮128token/div25三次自稳不exact；路径错误与采集并行"
+      },
+      {
+        "phase": "新003三次及004首轮参考FAIL收齐",
+        "wall_s": 151.415,
+        "note": "003110token/div15三次，004首轮89/div35；服务正常"
+      },
+      {
+        "phase": "新004三次参考FAIL收齐",
+        "wall_s": 51.559,
+        "note": "89token/div35三次自稳；不是3次启动"
+      },
+      {
+        "phase": "新005三次及全15采集完成",
+        "wall_s": 49.665,
+        "note": "36token/div2三次，全15input exact/selfstable但0reference exact"
+      },
+      {
+        "phase": "主控独立原raw15数值门禁裁决FAIL",
+        "wall_s": 13.06,
+        "note": "本地检查器exit0得数值FAIL，不能增计outer非零；不重发请求"
+      },
+      {
+        "phase": "L2 FAIL探针封装及唯一停止UNKNOWN",
+        "wall_s": 36.989,
+        "note": "probe_service/emit exit0；一次ctl11TERM/UNKNOWN，原停止签名保留"
+      },
+      {
+        "phase": "full48停止UNKNOWN至main独立释放接受",
+        "wall_s": 35.768,
+        "note": "9Z2gone/port111/preflight0/main npu-smi无进程；非精确退出时刻"
+      },
+      {
+        "phase": "新oob立案及四件套索引封存",
+        "wall_s": 25.624,
+        "note": "实际oob exit0/card回填，重复known_good模板文案须限定"
+      },
+      {
+        "phase": "173成员报告封存及main终态核对",
+        "wall_s": 85.479,
+        "note": "Tester173成员与旧/新staging核验；7helper已gone，原G3bFAIL保留"
+      },
+      {
+        "phase": "主控数值FAIL返诊决定与新delegation材料",
+        "wall_s": 40.57,
+        "note": "same RCAprimary/3600s；保留CPU参考来源限制与原局部证据边界"
+      },
+      {
+        "phase": "新诊断派发接收与triage复用稳定证据",
+        "wall_s": 162.536,
+        "note": "新任务同primary，zipstrict宿主兼容错误恢复25.805s；未重发稳定性请求"
+      },
+      {
+        "phase": "续轮源码与采集方案准备及首版冻结",
+        "wall_s": 146.634,
+        "note": "SDK1524文件复制byteexact；主控117.976s压缩与准备同段，非全部浪费"
+      },
+      {
+        "phase": "执行前两处路径修正及生成器语法恢复",
+        "wall_s": 35.052,
+        "note": "runtime-check config/dump旧引用修正；SyntaxError→second9.835s；未运行"
+      },
+      {
+        "phase": "第二版复核发现旧start目录并修至第三版",
+        "wall_s": 76.195,
+        "note": "main识别潜在写旧封存目录风险，第三版旧可执行引用0，未运行旧版"
+      },
+      {
+        "phase": "第三版20成员及执行边界独立复核授权",
+        "wall_s": 27.726,
+        "note": "20hash/SDK1524exact；7leaf/3请求2token，原控制服务复用，无额外control"
+      },
+      {
+        "phase": "新环境与八卡检查及T0启动",
+        "wall_s": 45.081,
+        "note": "supervisor2453150/preflight0；资源空闲不是预约"
+      },
+      {
+        "phase": "本轮完整T0双editable/import/模型卫生",
+        "wall_s": 46.072,
+        "note": "T0exit0观察46.072s；不是额外模型失败"
+      },
+      {
+        "phase": "T0后唯一helper组与实际API receipt回读",
+        "wall_s": 47.612,
+        "note": "launch/driver/watcher启动一次；API277727真实服务16确认"
+      },
+      {
+        "phase": "服务16初始化及三次SDK采集完成回读",
+        "wall_s": 124.496,
+        "note": "实际readiness122.495s；3请求各2token，非实际HTTPsum；准备CPU工具可并行"
+      },
+      {
+        "phase": "本轮唯一停止异常与只读释放独立裁决",
+        "wall_s": 96.242,
+        "note": "stop1，主控原reportINCOMPLETE；9Z2gone/port111/8卡健康无进程；原reason/signals未导出"
+      },
+      {
+        "phase": "原始索引/跨重复一致性及数值覆盖",
+        "wall_s": 166.131,
+        "note": "RCA压缩后执行index1.023s+numericwrapper3.574s；1008finite/稳定；窗口含准备与压缩重叠"
+      },
+      {
+        "phase": "官方GDN叶子同输入方案审核与CPU重放",
+        "wall_s": 119.89,
+        "note": "program31.953s/wrapper33.225s；官方16/16不等，current11/16exact"
+      },
+      {
+        "phase": "GDN源序核对/候选副本与HC闭环复核",
+        "wall_s": 153.642,
+        "note": "仅副本候选未运行；HC当前source-region2phaseexact实际NPU，wrapper3.426s"
+      },
+      {
+        "phase": "候选fixture生成失败恢复及冻结审核",
+        "wall_s": 51.463,
+        "note": "嵌套引号SyntaxError→SECOND冻结；FIRST未执行，非模型失败"
+      },
+      {
+        "phase": "唯一候选CPU方法fixture准备/授权/执行",
+        "wall_s": 61.804,
+        "note": "wrapper3.623s；candidate16/16officialexact/default16unchanged；非NPU模型验证"
+      },
+      {
+        "phase": "方法级结果核对/原始封存与轮次上限呈报",
+        "wall_s": 69.571,
+        "note": "三个实际全层数值批次均FAIL，第四正式轮待授权；已授权交付仍继续"
+      },
+      {
+        "phase": "候选归档清理/报告交接与3018文件封存",
+        "wall_s": 190.726,
+        "note": "归档源候选后清除disposable，生产不变/5analysishelpergone；manifest0.907s"
+      },
+      {
+        "phase": "交接17入口及3018成员独立核验签收",
+        "wall_s": 56.696,
+        "note": "ACTUAL_VERIFIED17/3018bad[]；只签诊断，run未终止"
+      },
+      {
+        "phase": "本轮回合结束，等待用户轮次选择",
+        "wall_s": 7.891,
+        "note": "idle/completed是回合结束；rununterminatedpendinguserchoice，任务未完成；不延长到心跳时刻"
+      }
+    ]
+  }
+}
