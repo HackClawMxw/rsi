@@ -1,0 +1,4 @@
+2026-10-24 09:21:01 [error] RuntimeError: HCCL error, binding failed, code=E00101
+2026-10-24 09:21:05 [info] retrying
+2026-10-24 09:40:12 [error] ValueError: shape mismatch under tensor parallel
+2026-10-24 09:40:30 [info] fallback to eager

@@ -1,0 +1,394 @@
+{
+  "source": "/Users/cx/Desktop/code/agent/AscendBot/workflow/skills/day0-inference/reference/troubleshooting-signatures.md",
+  "seeded_at": "2026-10-26",
+  "signatures": [
+    {
+      "id": "SIG-001",
+      "patterns": [
+        "RuntimeError: HCCL error.*binding failed"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "残留服务占端口 / HCCL 未初始化",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-002",
+      "patterns": [
+        "OutOfMemoryError"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "显存不足 / 碎片",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-039",
+      "patterns": [
+        "page_size"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "自定义 KVCacheSpec 归并时派生字段（`page_size_padded` / `indexes_kv_by_block_stride`，锚点 `core/kv_cache_interface.py`）被 merge 静默丢弃",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-040",
+      "patterns": [],
+      "dropped_patterns": [],
+      "root_cause": "驱动记账滞后（僵尸占用），多任务共享机高发",
+      "applicability": "通用",
+      "needs_review": true
+    },
+    {
+      "id": "SIG-011",
+      "patterns": [
+        "not initialized",
+        "size mismatch",
+        "shape mismatch"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "权重映射缺漏",
+      "applicability": "文案随版本",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-005",
+      "patterns": [
+        "Shape mismatch.*under tensor parallel"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "KV head 复制未处理",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-007",
+      "patterns": [
+        "Cannot copy out of meta tensor"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "meta 加载路径意外触发（VL）",
+      "applicability": "VL",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-008",
+      "patterns": [
+        "skip_tensor_conversion signature mismatch"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "processor API 版本失配（HF remote code vs 当前 transformers）",
+      "applicability": "VL",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-028",
+      "patterns": [
+        "ImportError/ModuleNotFoundError"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "符号模块级错配（文件存在 ≠ 符号在该模块）",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-030",
+      "patterns": [
+        "ValueError: Processor class does not support"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "processor 配置/实现与当前 transformers 不兼容（VL）",
+      "applicability": "VL",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-013",
+      "patterns": [
+        "Unexpected extra config keys"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "配置项校验告警",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-006",
+      "patterns": [
+        "AtbRingMLA runtime error",
+        "numHeads / numKvHeads.*only support \\{32, 64, 128\\}"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "MLA backend/RoPE 失配、头比不支持",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-029",
+      "patterns": [],
+      "dropped_patterns": [],
+      "root_cause": "权重映射错 / KV 分片错——「200 且非空挡不住胡话」",
+      "applicability": "通用",
+      "needs_review": true
+    },
+    {
+      "id": "SIG-038",
+      "patterns": [
+        "too many values to unpack (expected 2)"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "norm 无 residual 分支返回单张量，调用方按二元组解包——覆写实现的返回签名未与上游逐分支对齐",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-003",
+      "patterns": [
+        "EZ9999.*507903"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "stream capture 序列失效",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-010",
+      "patterns": [
+        "Failed to capture NPU graph"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "图内非张量操作",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-012",
+      "patterns": [
+        "107030"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "图模式同步 memcpy",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-014",
+      "patterns": [
+        "#10328"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "vllm-ascend",
+      "applicability": "待核",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-009",
+      "patterns": [
+        "torch._dynamo.exc.Unsupported: interpolate"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "dynamo 按 CUDA 语义编译（VL）",
+      "applicability": "VL",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-004",
+      "patterns": [
+        "fp8 quantization is currently not supported"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "fp8 kernel 缺失",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-016",
+      "patterns": [
+        "K3 #14575"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "vllm-ascend",
+      "applicability": "待核",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-031",
+      "patterns": [
+        "bfloat16 is not supported on this device"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "硬件/CANN 版本不支持 bf16",
+      "applicability": "低版本 CANN",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-032",
+      "patterns": [
+        "NaN/Inf detected in output"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "fp16 溢出（LayerNorm/Softmax 等大数值算子）",
+      "applicability": "fp16 路径",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-033",
+      "patterns": [
+        "not implemented for Half"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "某算子未实现 fp16 kernel",
+      "applicability": "fp16 路径",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-034",
+      "patterns": [
+        "dtype mismatch"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "权重 dtype 与运行 dtype 失配",
+      "applicability": "通用",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-035",
+      "patterns": [],
+      "dropped_patterns": [],
+      "root_cause": "config.json `torch_dtype: float32` 被 `--dtype auto` 读取",
+      "applicability": "通用",
+      "needs_review": true
+    },
+    {
+      "id": "SIG-015",
+      "patterns": [
+        "#51113"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "上游 vLLM",
+      "applicability": "待核",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-019",
+      "patterns": [
+        "validate_runtime"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "KV Pool layerwise 与 recurrent state/TP mismatch 不兼容",
+      "applicability": "池化",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-020",
+      "patterns": [
+        "kv_load_failure_policy=recompute"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "recompute 策略与混合 KV group 冲突",
+      "applicability": "池化",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-021",
+      "patterns": [
+        "vllm#53595"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "上游 vLLM",
+      "applicability": "待核",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-027",
+      "patterns": [],
+      "dropped_patterns": [],
+      "root_cause": "池化 KV 失效/失效传播语义错误",
+      "applicability": "池化",
+      "needs_review": true
+    },
+    {
+      "id": "SIG-024",
+      "patterns": [],
+      "dropped_patterns": [],
+      "root_cause": "DP 下投机 padding 形状未对齐",
+      "applicability": "DP×投机",
+      "needs_review": true
+    },
+    {
+      "id": "SIG-017",
+      "patterns": [
+        "GLM-5.1 #9958"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "vllm-ascend",
+      "applicability": "待核",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-018",
+      "patterns": [],
+      "dropped_patterns": [],
+      "root_cause": "状态未恢复至已接受边界；快照槽数/重算范围依实际协议",
+      "applicability": "线性注意力×投机",
+      "needs_review": true
+    },
+    {
+      "id": "SIG-023",
+      "patterns": [
+        "GLM-5.2 #13531"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "vllm-ascend",
+      "applicability": "待核",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-025",
+      "patterns": [
+        "vllm-ascend #14951"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "vllm-ascend（issue；修复 PR `#14952`）",
+      "applicability": "待核",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-026",
+      "patterns": [
+        "vllm#27703"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "上游 vLLM",
+      "applicability": "待核",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-036",
+      "patterns": [
+        "content",
+        "reasoning_content"
+      ],
+      "dropped_patterns": [],
+      "root_cause": "三件套（`--tokenizer-mode` / `--tool-call-parser` / `--reasoning-parser`）与 checkpoint 代次不符——parser 名合法即可加载，错的是协议语义",
+      "applicability": "服务层",
+      "needs_review": false
+    },
+    {
+      "id": "SIG-037",
+      "patterns": [],
+      "dropped_patterns": [],
+      "root_cause": "解码 / 预处理对 `skip_special_tokens` 类开关处理错误，或模板未保留边界 token；短上下文正常、长上下文才现形",
+      "applicability": "服务层",
+      "needs_review": true
+    },
+    {
+      "id": "SIG-022",
+      "patterns": [],
+      "dropped_patterns": [],
+      "root_cause": "图像分辨率/并发未约束",
+      "applicability": "VL",
+      "needs_review": true
+    }
+  ]
+}
