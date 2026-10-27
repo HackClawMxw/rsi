@@ -22,10 +22,14 @@ REQUIRED_METRIC_KEYS = [
 ]
 OUTCOMES = {"signed", "pending", "aborted"}
 STAGES = {"S1", "S2", "S3", "S4"}
+STAGE_STATUS = {"signed", "fail", "pending", "skipped", "na"}
 CAND_FILE = re.compile(r"^C-\d{3}-[a-z0-9-]+\.md$")
 STATES = {"registered", "evidence-attached", "adjudicated", "change-proposed",
           "canary-passed", "merged"}
 STATUS_LINE = re.compile(r"^-\s*状态：(\S+)", re.M)
+NON_NEGATIVE_FIELDS = ["total_span_seconds", "human_wait_seconds",
+                       "authorization_windows_seconds", "rework_rounds",
+                       "friction_count"]
 
 
 class Report:
@@ -76,24 +80,48 @@ def main() -> int:
         if m.get("outcome") is not None:
             rep.check(m["outcome"] in OUTCOMES, f"快照 {f.name} outcome 枚举",
                       str(m["outcome"]))
+        for field in NON_NEGATIVE_FIELDS:
+            v = m.get(field)
+            if v is not None:
+                rep.check(isinstance(v, (int, float)) and v >= 0,
+                          f"快照 {f.name} {field} 非负",
+                          str(v))
         stages = m.get("stages")
         if isinstance(stages, dict) and stages:
             rep.check(set(stages) <= STAGES, f"快照 {f.name} stages 键",
                       str(set(stages) - STAGES))
+            for sid, sv in stages.items():
+                if isinstance(sv, dict) and sv.get("status") is not None:
+                    rep.check(sv["status"] in STAGE_STATUS,
+                              f"快照 {f.name} {sid} status 枚举",
+                              str(sv["status"]))
+                if isinstance(sv, dict) and sv.get("seconds") is not None:
+                    rep.check(isinstance(sv["seconds"], (int, float))
+                              and sv["seconds"] >= 0,
+                              f"快照 {f.name} {sid} seconds 非负",
+                              str(sv["seconds"]))
 
     # 3. 候选生命周期
     cand_dir = root / "candidates"
+    vv_path = root / "canaries" / "validated-versions.md"
+    vv_text = vv_path.read_text(encoding="utf-8") if vv_path.is_file() else ""
     for f in sorted(cand_dir.glob("C-*.md")):
         if not CAND_FILE.match(f.name):
             rep.check(False, f"候选命名 {f.name}", "须为 C-NNN-slug.md")
             continue
         text = f.read_text(encoding="utf-8")
         m = STATUS_LINE.search(text)
-        state = m.group(1) if m else None
+        # 状态允许带参数：merged(a0e648c) —— 取括号前的基本状态做枚举校验
+        state = m.group(1).split("(")[0].strip() if m else None
         rep.check(state in STATES, f"候选 {f.name} 状态合法",
                   f"{state!r} 不在 {sorted(STATES)}")
+        if state in {"canary-passed", "merged"}:
+            rep.check(f.stem in vv_text,
+                      f"候选 {f.name} 有验证记录",
+                      f"{state} 但 {vv_path.name} 无 {f.stem} 的行——无记录不得放行")
         if state == "merged":
-            rep.check("merged(" in text, f"候选 {f.name} 已合入须带锚点",
+            rep.check(bool(re.search(r"merged\([^)]+\)", text)),
+                      f"候选 {f.name} 已合入须带锚点",
                       "缺 merged(<skill_anchor>)")
 
     # 4. 签名注册表

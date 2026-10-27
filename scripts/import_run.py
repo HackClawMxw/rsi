@@ -21,7 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 TIME_FORMATS = (
@@ -84,6 +84,8 @@ def main() -> int:
                     help="输出路径（默认 <run_dir>/run_metrics.json）")
     ap.add_argument("--gap-threshold", type=int, default=600,
                     help="等待候选窗口阈值，秒（默认 600）")
+    ap.add_argument("--force", action="store_true",
+                    help="允许覆盖已存在的输出文件（closeout 原件保护）")
     args = ap.parse_args()
 
     run_dir = args.run_dir.resolve()
@@ -101,6 +103,7 @@ def main() -> int:
     base: datetime | None = None
     parsed: list[tuple[str, str, datetime]] = []  # (time_raw, event, dt)
     skipped = 0
+    prev: datetime | None = None
     for cells in rows:
         dt = parse_time_cell(cells[0], base)
         if dt is None:
@@ -108,7 +111,11 @@ def main() -> int:
             continue
         if base is None and dt.year != 1900:  # 首个带完整日期的时间戳，供纯时间列补全
             base = dt
+        if prev is not None and "-" not in cells[0]:
+            while dt < prev:  # 仅纯时间列补跨天（如 23:50 → 00:10）；完整日期乱序是数据错误，交给负跨度检查
+                dt += timedelta(days=1)
         parsed.append((cells[0], cells[2], dt))
+        prev = dt
 
     if len(parsed) < 2:
         print(f"错误：可解析的时间戳不足（{len(parsed)}/{len(rows)}），无法计算跨度",
@@ -117,6 +124,10 @@ def main() -> int:
 
     first, last = parsed[0][2], parsed[-1][2]
     span = (last - first).total_seconds()
+    if span < 0:
+        print(f"错误：时间序列回退（跨度 {fmt_duration(int(span))}），"
+              "检查 tracker 时间列是否有乱序/错日期", file=sys.stderr)
+        return 1
 
     wait_candidates = []
     for (t0, e0, d0), (t1, e1, d1) in zip(parsed, parsed[1:]):
@@ -153,6 +164,10 @@ def main() -> int:
     }
 
     out = args.out or (run_dir / "run_metrics.json")
+    if out.exists() and not args.force:
+        print(f"错误：{out} 已存在（可能是 closeout 产出的原件）。"
+              "确认覆盖用 --force，或用 --out 指到别的路径", file=sys.stderr)
+        return 1
     out.write_text(json.dumps(metrics, ensure_ascii=False, indent=2) + "\n",
                    encoding="utf-8")
     print(f"已写出 {out}")

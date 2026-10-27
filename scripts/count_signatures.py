@@ -8,6 +8,9 @@
 对注册表里每个签名的每条正则，在给定日志（文件或目录递归）中计数。
 这是普查不是门禁——无论命中与否退出码都是 0（门禁用 check_signature.py）。
 --update-metrics 把结果并进 run_metrics.json 的 signature_hits 字段。
+
+默认只扫日志类文件（.log/.out/.txt/无扩展名）——分析文档里讨论到的错误
+文案不算故障命中；确要扫全部文件加 --all。
 """
 
 from __future__ import annotations
@@ -20,21 +23,40 @@ from pathlib import Path
 
 MAX_FILE_BYTES = 100 * 1024 * 1024
 SKIP_DIRS = {".git", "__pycache__", ".ruff_cache"}
+SCAN_EXTS = {".log", ".out", ".txt"}
 
 
-def iter_logs(inputs: list[Path]):
+def iter_logs(inputs: list[Path], scan_all: bool):
     seen: set[Path] = set()
+    skipped_md = 0
+
+    def want(f: Path) -> bool:
+        nonlocal skipped_md
+        if scan_all or f.suffix.lower() in SCAN_EXTS or f.suffix == "":
+            return True
+        skipped_md += 1
+        return False
+
     for p in inputs:
         if p.is_file():
-            if p not in seen:
-                seen.add(p)
+            if p in seen:
+                continue
+            seen.add(p)
+            if want(p):
                 yield p
+            elif p.suffix.lower() in {".md", ".json"}:
+                print(f"跳过（非日志，{p.suffix}）：{p.name}", file=sys.stderr)
         elif p.is_dir():
             for f in sorted(p.rglob("*")):
                 if f.is_file() and not any(d in SKIP_DIRS for d in f.parts):
-                    if f not in seen:
-                        seen.add(f)
+                    if f in seen:
+                        continue
+                    seen.add(f)
+                    if want(f):
                         yield f
+    if skipped_md:
+        print(f"提示：跳过 {skipped_md} 个非日志文件（--all 可扫全部）",
+              file=sys.stderr)
 
 
 def main() -> int:
@@ -43,10 +65,12 @@ def main() -> int:
     ap.add_argument("--logs", nargs="+", required=True, type=Path)
     ap.add_argument("--context", type=int, default=2)
     ap.add_argument("--update-metrics", type=Path, default=None)
+    ap.add_argument("--all", action="store_true",
+                    help="扫描全部文件（默认仅 .log/.out/.txt/无扩展名）")
     args = ap.parse_args()
 
     registry = json.loads(args.registry.read_text(encoding="utf-8"))
-    files = list(iter_logs(args.logs))
+    files = list(iter_logs(args.logs, args.all))
     texts: list[tuple[Path, list[str]]] = []
     for f in files:
         try:
