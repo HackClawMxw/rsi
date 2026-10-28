@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "state_dir": "/REPLACE_WITH/rsi-state/day0-search-001",
+  "workspace": "/REPLACE_WITH/target-repository",
+  "skill_source": "/REPLACE_WITH/AscendBot/workflow/skills/day0-inference",
+  "task": "REPLACE_WITH: After held-out acceptance, execute a new Day0 run with the selected skill. Specify model, weights, target repository revision, server/container, NPU allocation, precision/performance criteria, and existing authorization.",
+  "allowed_paths": [
+    "reference/REPLACE_WITH-reviewed-knowledge-file.md"
+  ],
+  "protected_paths": [
+    "SKILL.md",
+    "scripts/**",
+    "**/check_*",
+    "**/*gate*",
+    "**/*baseline*"
+  ],
+  "steps": {
+    "run": {
+      "adapter": "codex",
+      "binary": "codex"
+    },
+    "improve": {
+      "adapter": "codex",
+      "binary": "codex"
+    },
+    "quick": {
+      "adapter": "command",
+      "cwd": "/REPLACE_WITH/independent-evaluator",
+      "argv": [
+        "{python}",
+        "quick_check.py",
+        "--context",
+        "{context_file}"
+      ]
+    },
+    "evaluate": {
+      "adapter": "command",
+      "cwd": "/REPLACE_WITH/independent-evaluator",
+      "argv": [
+        "{python}",
+        "day0_search_harness.py",
+        "--context",
+        "{context_file}"
+      ]
+    }
+  },
+  "limits": {
+    "max_cycles": 4,
+    "max_wall_seconds": 604800,
+    "max_no_change_cycles": 3,
+    "poll_seconds": 2,
+    "log_limit_bytes": 67108864,
+    "timeouts": {
+      "run": 86400,
+      "improve": 3600,
+      "quick": 300,
+      "evaluate": 172800
+    }
+  },
+  "validation": {
+    "key": "REPLACE_WITH: target-commit/model-weights-hash/dataset-hash/NPU-model/card-count/CANN-vLLM-image-digest/case-matrix-v1",
+    "inputs": [
+      "/REPLACE_WITH/independent-evaluator/quick_check.py",
+      "/REPLACE_WITH/independent-evaluator/day0_search_harness.py",
+      "/REPLACE_WITH/independent-evaluator/day0-tasks.json"
+    ],
+    "baseline_cache_ttl_seconds": 86400,
+    "min_gain": 0.01,
+    "max_case_regression": 0.0
+  },
+  "optimizer": {
+    "strategy": "pareto",
+    "dataset": "/REPLACE_WITH/independent-evaluator/day0-tasks.json",
+    "seed": 42,
+    "train_batch_size": 2,
+    "max_metric_calls": 60,
+    "max_full_evaluations": 8,
+    "min_train_gain": 0.01
+  }
+}

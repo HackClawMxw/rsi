@@ -25,7 +25,7 @@ mkdir -p "$TD/run1"
 printf '| 时间 | 步骤 | 事件 | 产物 |\n|---|---|---|---|\n| 23:50:00 | P1 | 跨天前 | a |\n| 00:10:00 | P2 | 跨天后 | b |\n' > "$TD/run1/tracker.md"
 python3 "$SCRIPTS/import_run.py" "$TD/run1" --out "$TD/runs/run1.json" >/dev/null 2>&1
 S=$(python3 -I -c "import json;print(json.load(open('$TD/runs/run1.json'))['total_span_seconds'])")
-[ "$S" = "1200" ]; ck $? "用例1 跨天跨度=1200s（实际 $S）"
+[ "$S" = "1200" ]; ck $? "用例1 跨天跨度=1200s（实际 ${S}）"
 
 # —— 用例2：已有 run_metrics.json 时不许覆盖，--force 才许 ——
 echo '{"run_id":"run1","skill_anchor":"a0e648c","outcome":"signed"}' > "$TD/run1/run_metrics.json"

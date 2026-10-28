@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "state_dir": "./.state",
+  "workspace": "./workspace",
+  "skill_source": "./skill",
+  "task": "Classify the recorded worker failure and recover when it is a known transient capacity failure.",
+  "allowed_paths": ["notes.md"],
+  "protected_paths": ["SKILL.md", "scripts/**"],
+  "steps": {
+    "run": {"adapter": "command", "cwd": ".", "argv": ["{python}", "demo_hook.py"]},
+    "improve": {"adapter": "command", "cwd": ".", "argv": ["{python}", "demo_hook.py"]},
+    "quick": {"adapter": "command", "cwd": ".", "argv": ["{python}", "demo_hook.py"]},
+    "evaluate": {"adapter": "command", "cwd": ".", "argv": ["{python}", "demo_hook.py"]}
+  },
+  "limits": {
+    "max_cycles": 3,
+    "max_wall_seconds": 300,
+    "max_no_change_cycles": 2,
+    "poll_seconds": 0.1,
+    "log_limit_bytes": 1048576,
+    "timeouts": {"run": 15, "improve": 15, "quick": 15, "evaluate": 60}
+  },
+  "validation": {
+    "key": "fixture-classifier-v1",
+    "inputs": ["./demo_hook.py"],
+    "baseline_cache_ttl_seconds": 300,
+    "min_gain": 0.01,
+    "max_case_regression": 0.0
+  }
+}

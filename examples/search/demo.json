@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "state_dir": "./.state",
+  "workspace": "./workspace",
+  "skill_source": "./skill",
+  "task": "Learn recovery notes from measured training failures while preserving the fatal-error stop rule.",
+  "allowed_paths": ["notes.md"],
+  "protected_paths": ["SKILL.md", "scripts/**"],
+  "steps": {
+    "run": {"adapter": "command", "cwd": ".", "argv": ["{python}", "demo_hook.py"]},
+    "improve": {"adapter": "command", "cwd": ".", "argv": ["{python}", "demo_hook.py"]},
+    "quick": {"adapter": "command", "cwd": ".", "argv": ["{python}", "demo_hook.py"]},
+    "evaluate": {"adapter": "command", "cwd": ".", "argv": ["{python}", "demo_hook.py"]}
+  },
+  "limits": {
+    "max_cycles": 4,
+    "max_wall_seconds": 300,
+    "max_no_change_cycles": 3,
+    "poll_seconds": 0.1,
+    "log_limit_bytes": 1048576,
+    "timeouts": {"run": 15, "improve": 15, "quick": 15, "evaluate": 30}
+  },
+  "validation": {
+    "key": "worker-recovery-search-fixture-v1",
+    "inputs": ["./demo_hook.py", "./tasks.json"],
+    "baseline_cache_ttl_seconds": 300,
+    "min_gain": 0.01,
+    "max_case_regression": 0.0
+  },
+  "optimizer": {
+    "strategy": "pareto",
+    "dataset": "./tasks.json",
+    "seed": 42,
+    "train_batch_size": 2,
+    "max_metric_calls": 80,
+    "max_full_evaluations": 10,
+    "min_train_gain": 0.01
+  }
+}

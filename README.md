@@ -1,6 +1,6 @@
 # RSI Lab — skill 演进外环
 
-> **当前状态（诚实口径）**：基础设施已建成并通过自检；**「改进有效」尚未验证**——还没有走完一次"改 skill → 对照 → 账本记结论"的闭环。第一次闭环以 canaries 验证记录 + 账本「改动收益」行为准，在此之前请把本仓当作"有纪律的复盘基础设施"，不要当作已验证有效的 RSI 系统。
+> **当前状态**：提供离线复盘工具与可启动的 RSI circle 服务。服务支持 Codex CLI → 候选 skill → 独立验证 → 下一轮调度；真实 Day0 的改进效果尚待生产 canary 和同锚点多 run 对账验证，离线演示不能替代这些证据。
 
 本仓是 AscendBot 系列 skill 的**演进基础设施**：聚合 run 证据、维护演进账本、裁决演进候选、验证 skill 变更。它**不装进目标仓、不是任何 skill 的运行时依赖**——lab 不在，skill 照常干活，只是没人记账。
 
@@ -15,6 +15,28 @@ AscendBot（skill 仓）          目标仓（vllm-ascend 等）        本仓�
 ```
 
 数据流向：目标仓 closeout 产出 `run_metrics.json` → `scripts/import_run.py` 导入 `runs/` → `ledger/` 聚合成成本排名 → 演进候选进 `candidates/`（附账本证据）→ 用户裁决 → 以 PR 提给 AscendBot → 按 `canaries/` 纪律验证 → 合入并登记版本锚点。
+
+## 服务闭环（Codex CLI + Day0）
+
+```bash
+cd /Users/cx/code/RSI/rsi
+python3 -m rsi_service serve --config examples/circle/demo.json
+python3 -m rsi_service status --config examples/circle/demo.json
+```
+
+上述配置运行本地 fixture，不调用 Codex 或 NPU。真实接入使用 `examples/circle/codex-day0.example.json`，填入目标仓、Day0 skill、任务和独立检查器。服务将长验证交给独立 worker，支持重启接管、快速检查、baseline 缓存、预算和显式取消；验证通过后下一轮使用管理中的新 skill 快照。
+
+详见 [服务说明](docs/SERVICE.md) 与 [任务清单](TASKS.md)。外部 skill 仓库的 PR 发布和真实收益归因仍保留原有证据纪律。
+
+## 任务集与历史候选搜索
+
+可选的 `optimizer.strategy: "pareto"` 在服务上增加训练/验证/测试任务集、结构化反思反馈、历史候选池与逐样例优势选择。搜索中的版本与实际生效版本分别管理；搜索结束后才使用留出测试决定最终切换。验证预算按任务数和完整验证批次分别限制。
+
+```bash
+python3 -m rsi_service serve --config examples/search/demo.json
+```
+
+这是参考 GEPA/gskill 机制的本地实现，不依赖上游 GEPA 包。演示仍是离线 fixture；真实 Day0 接入方式与算法边界见 [搜索说明](docs/SEARCH.md)。
 
 ## 快速跑通（复盘的机械部分）
 
@@ -37,6 +59,12 @@ python3 scripts/check_repo.py
 
 | 路径 | 职责 |
 |---|---|
+| `rsi_service/` | 持久化调度器、Codex/命令适配器与长任务 worker |
+| `examples/circle/` | 离线演示、Codex/Day0 配置模板与 systemd 示例 |
+| `examples/search/` | 任务集搜索演示、分区样例与 Day0 配置模板 |
+| `docs/SERVICE.md` | 服务启动、长验证恢复、结果和独立验证契约 |
+| `docs/SEARCH.md` | 历史候选搜索、训练反馈、评估预算与最终留出测试 |
+| `TASKS.md` | 本版交付与真实 Day0 验收清单 |
 | `CONTRACT.md` | skill 侧必须实现的两个稳定契约（metrics 上报、候选登记格式） |
 | `runs/` | 每 run 一份 metrics 快照，只增不改 |
 | `ledger/` | 跨 run 账本：失败模式频次 × 耗时 = 成本排名，回答「改哪里」 |

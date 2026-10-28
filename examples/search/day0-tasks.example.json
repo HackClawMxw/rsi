@@ -1,0 +1,56 @@
+{
+  "train": [
+    {
+      "id": "train-initialization",
+      "task": "REPLACE_WITH: 训练集的独立初始化故障案例；明确可复验入口和原有门禁。",
+      "input": {
+        "case_manifest": "/REPLACE_WITH/cases/train-initialization.json",
+        "scope": "REPLACE_WITH: Stage 1 setup/local canary/full Day0"
+      }
+    },
+    {
+      "id": "train-precision",
+      "task": "REPLACE_WITH: 训练集的独立精度回归案例；指定固定题集和通过标准。",
+      "input": {
+        "case_manifest": "/REPLACE_WITH/cases/train-precision.json",
+        "scope": "REPLACE_WITH: precision canary/full Day0"
+      }
+    }
+  ],
+  "validation": [
+    {
+      "id": "validation-initialization",
+      "task": "REPLACE_WITH: 验证集的独立初始化故障案例；明确可复验入口和原有门禁。",
+      "input": {
+        "case_manifest": "/REPLACE_WITH/cases/validation-initialization.json",
+        "scope": "REPLACE_WITH: Stage 1 setup/local canary/full Day0"
+      }
+    },
+    {
+      "id": "validation-precision",
+      "task": "REPLACE_WITH: 验证集的独立精度回归案例；指定固定题集和通过标准。",
+      "input": {
+        "case_manifest": "/REPLACE_WITH/cases/validation-precision.json",
+        "scope": "REPLACE_WITH: precision canary/full Day0"
+      }
+    }
+  ],
+  "test": [
+    {
+      "id": "test-initialization",
+      "task": "REPLACE_WITH: 留出集的独立初始化故障案例；明确可复验入口和原有门禁。",
+      "input": {
+        "case_manifest": "/REPLACE_WITH/cases/test-initialization.json",
+        "scope": "REPLACE_WITH: Stage 1 setup/local canary/full Day0"
+      }
+    },
+    {
+      "id": "test-precision",
+      "task": "REPLACE_WITH: 留出集的独立精度回归案例；指定固定题集和通过标准。",
+      "input": {
+        "case_manifest": "/REPLACE_WITH/cases/test-precision.json",
+        "scope": "REPLACE_WITH: precision canary/full Day0"
+      }
+    }
+  ]
+}

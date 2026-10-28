@@ -1,0 +1,21 @@
+[Unit]
+Description=RSI Day0 circle supervisor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=REPLACE_WITH_USER
+WorkingDirectory=/REPLACE_WITH/rsi
+ExecStart=/usr/bin/python3 -m rsi_service serve --config /REPLACE_WITH/day0.json
+ExecStop=/usr/bin/python3 -m rsi_service stop --config /REPLACE_WITH/day0.json
+Restart=on-failure
+RestartSec=10
+# A detached long validation must survive a supervisor restart.
+# Explicit job cancellation is `python3 -m rsi_service cancel --config ...`.
+KillMode=process
+TimeoutStopSec=15
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

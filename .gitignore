@@ -1,3 +1,7 @@
 .DS_Store
 __pycache__/
 .relay/
+examples/circle/.state/
+examples/circle/*.local.json
+examples/search/.state/
+examples/search/*.local.json

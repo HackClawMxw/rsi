@@ -1,0 +1,18 @@
+{
+  "train": [
+    {"id": "train-capacity-a", "task": "Classify a transient allocation failure during worker startup.", "input": {"message": "worker-a startup: TEMPORARY_CAPACITY; resources may become available", "expected": "retry_later"}},
+    {"id": "train-graph-a", "task": "Classify an unsupported graph-capture path during warmup.", "input": {"message": "worker-b warmup: GRAPH_CAPTURE_UNSUPPORTED; eager execution available", "expected": "eager_fallback"}},
+    {"id": "train-capacity-b", "task": "Classify a transient allocation failure during retry.", "input": {"message": "worker-c retry: TEMPORARY_CAPACITY; pool temporarily exhausted", "expected": "retry_later"}},
+    {"id": "train-graph-b", "task": "Classify an unsupported graph-capture path during tracing.", "input": {"message": "worker-d tracing: GRAPH_CAPTURE_UNSUPPORTED; operation requires eager", "expected": "eager_fallback"}}
+  ],
+  "validation": [
+    {"id": "val-capacity", "task": "Classify a transient resource failure in a validation worker.", "input": {"message": "validation-v1 launch: TEMPORARY_CAPACITY; queued capacity request", "expected": "retry_later"}},
+    {"id": "val-graph", "task": "Classify a validation worker's graph limitation.", "input": {"message": "validation-v2 setup: GRAPH_CAPTURE_UNSUPPORTED; eager path exists", "expected": "eager_fallback"}},
+    {"id": "val-fatal", "task": "Classify corrupt weights in a validation worker.", "input": {"message": "validation-v3 load: FATAL_CORRUPT_WEIGHTS", "expected": "stop"}}
+  ],
+  "test": [
+    {"id": "test-capacity", "task": "Classify a held-out transient resource failure.", "input": {"message": "heldout-z1 allocation: TEMPORARY_CAPACITY; resource contention", "expected": "retry_later"}},
+    {"id": "test-graph", "task": "Classify a held-out graph limitation.", "input": {"message": "heldout-z2 capture: GRAPH_CAPTURE_UNSUPPORTED; fallback supported", "expected": "eager_fallback"}},
+    {"id": "test-fatal", "task": "Classify a held-out fatal loading failure.", "input": {"message": "heldout-z3 checkpoint: FATAL_CORRUPT_WEIGHTS", "expected": "stop"}}
+  ]
+}
