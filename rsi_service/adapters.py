@@ -1,7 +1,7 @@
 """Build argument vectors for supervised commands and Codex CLI jobs.
 
-This module never executes a shell. Evaluation is an independent configured
-command; a Codex narrative is not evidence that a candidate passed evaluation.
+This module never executes a shell. Legacy evaluation uses independent commands.
+Autonomous model reviewers assess evidence; controller policy owns promotion.
 """
 from __future__ import annotations
 
@@ -136,23 +136,29 @@ def prepare(config: Dict[str, Any], phase: str, context: Dict[str, Any], job_dir
 
     ``command`` arguments are trusted operator configuration, with only three
     whole-argument placeholders. No shell or Python string formatting is used.
-    ``codex`` is limited to running the skill and proposing edits; it cannot be
-    configured as the independent quick/full evaluator.
+    Legacy quick/full evaluation still requires a command. Autonomous analysis
+    roles use isolated output working directories and never own promotion.
     """
-    if phase not in ("run", "improve", "quick", "evaluate"):
+    from .autonomous_models import READ_ONLY_PHASES, prompt_for, schema_for
+    autonomous = context.get("autonomy") is True
+    if phase not in ("run", "improve", "quick", "evaluate", "checks") and phase not in READ_ONLY_PHASES:
         raise ValueError("unsupported phase: " + str(phase))
+    if phase in READ_ONLY_PHASES and not autonomous:
+        raise ValueError("analysis phases require an autonomous context")
     step = config.get("steps", {}).get(phase)
     if not isinstance(step, dict):
         raise ValueError("missing step configuration: " + phase)
     adapter = step.get("adapter", "command")
     if adapter not in ("command", "codex"):
         raise ValueError("unsupported adapter: " + str(adapter))
-    if adapter == "codex" and phase not in ("run", "improve"):
-        raise ValueError("quick/evaluate require an independent command adapter")
+    if adapter == "codex" and phase in ("quick", "evaluate", "checks"):
+        raise ValueError("quick/evaluate/checks require an independent command adapter")
 
     job_dir = Path(job_dir).resolve()
     job_dir.mkdir(parents=True, exist_ok=True)
     result_path = job_dir / "output" / "result.json"
+    if result_path.parent.is_symlink():
+        raise ValueError("job output directory may not be a symlink")
     result_path.parent.mkdir(exist_ok=True)
     if "result_path" in context and Path(context["result_path"]).resolve() != result_path:
         raise ValueError("result_path must be job_dir/output/result.json")
@@ -166,6 +172,9 @@ def prepare(config: Dict[str, Any], phase: str, context: Dict[str, Any], job_dir
     normalized = dict(context, phase=phase, workspace=str(workspace), skill_dir=str(skill_dir),
                       baseline_dir=str(baseline_dir), candidate_dir=str(candidate_dir),
                       run_dir=str(run_dir), result_path=str(result_path))
+    if autonomous:
+        for name in ("allowed_paths", "protected_paths"):
+            normalized[name] = config.get(name, [])
     context_path = job_dir / "context.json"
     _write_once(context_path, _json(normalized))
     env = {
@@ -190,22 +199,29 @@ def prepare(config: Dict[str, Any], phase: str, context: Dict[str, Any], job_dir
         replacements = {"{python}": sys.executable, "{context_file}": str(context_path),
                         "{result_path}": str(result_path)}
         argv = [replacements.get(_text(arg, "argv element"), arg) for arg in args]
-        cwd = _directory(step.get("cwd", workspace), "command cwd")
+        if autonomous and phase in READ_ONLY_PHASES:
+            cwd = result_path.parent
+        elif autonomous and phase in ("run", "improve"):
+            cwd = candidate_dir if phase == "improve" else workspace
+        else:
+            cwd = _directory(step.get("cwd", workspace), "command cwd")
         return {"argv": argv, "cwd": str(cwd), "env": env, "stdin": None}
 
     if not (skill_dir / "SKILL.md").is_file():
         raise ValueError("selected skill snapshot has no SKILL.md")
-    cwd = candidate_dir if phase == "improve" else workspace
-    schema = IMPROVE_SCHEMA if phase == "improve" else RUN_SCHEMA
+    cwd = (result_path.parent if phase in READ_ONLY_PHASES
+           else candidate_dir if phase == "improve" else workspace)
+    schema = schema_for(phase) if autonomous else IMPROVE_SCHEMA if phase == "improve" else RUN_SCHEMA
     schema_path = job_dir / "schema.json"
     _write_once(schema_path, _json(schema))
-    prompt = _prompt(config, phase, normalized, context_path)
+    prompt = (prompt_for(config, phase, normalized, context_path) if autonomous
+              else _prompt(config, phase, normalized, context_path))
     _write_once(job_dir / "prompt.txt", prompt)
     argv = [_text(step.get("binary", "codex"), "codex binary"), "exec", "--json",
             "--color", "never", "--sandbox", "workspace-write", "-C", str(cwd),
             "--add-dir", str(result_path.parent), "--output-schema", str(schema_path),
             "-o", str(result_path)]
-    if phase == "improve" or step.get("skip_git_repo_check", False):
+    if autonomous or phase == "improve" or phase in READ_ONLY_PHASES or step.get("skip_git_repo_check", False):
         argv.append("--skip-git-repo-check")
     for key, flag in (("model", "--model"), ("profile", "--profile")):
         if step.get(key) is not None:

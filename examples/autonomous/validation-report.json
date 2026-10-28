@@ -1,0 +1,46 @@
+{
+  "kind": "real-codex-cpu-smoke",
+  "scope": "One full-payload analysis cycle; synthetic source session; no NPU or remote task",
+  "configured_model": "Inherited local Codex configuration; no model override",
+  "model_jobs": 8,
+  "validation_runs": 2,
+  "cycle_status": "promoted",
+  "decision": {
+    "gains": {
+      "failed_commands": 1
+    },
+    "promote": true,
+    "reason": "all gates passed and measured gains satisfy the fixed objective",
+    "weighted_gain": 1.0
+  },
+  "reflection_status": "supported",
+  "original_skill_digest": "af16d14590bd91d36061d02b6f0647f6be24ebf71024222a27778693342e275e",
+  "candidate_skill_digest": "034d6bb177a647e19cc7f91865af82390ce2ca1a4247d07303d98a5d6f5a738c",
+  "selected_skill_digest": "034d6bb177a647e19cc7f91865af82390ce2ca1a4247d07303d98a5d6f5a738c",
+  "elapsed_seconds": 630.947,
+  "baseline": {
+    "operator_checks_passed": true,
+    "failed_tools": 1,
+    "gates": [
+      {
+        "id": "protocol_correct",
+        "status": "pass"
+      }
+    ]
+  },
+  "candidate": {
+    "operator_checks_passed": true,
+    "failed_tools": 0,
+    "gates": [
+      {
+        "id": "protocol_correct",
+        "status": "pass"
+      }
+    ]
+  },
+  "limitations": [
+    "Single paired CPU trial does not establish generalization or repeatability.",
+    "Qwen Day0 session ingestion/indexing was checked separately; no full model analysis or NPU trial was started.",
+    "Final controller boundary changes are covered by the automated suite, including timeline feedback and frozen job inputs."
+  ]
+}

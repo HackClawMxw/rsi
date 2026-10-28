@@ -224,7 +224,10 @@ class Controller:
             raise ValueError("wall-time budget exhausted before job launch")
         atomic_json(job_dir / "request.json", request)
         job = {"id": job_id, "dir": str(job_dir), "phase": cycle["phase"], "skill_digest": anchor,
-               "submitted_at": time.time()}
+               "submitted_at": time.time(),
+               "input_artifacts": {str(p): file_hash(p) for p in
+                                   (job_dir / name for name in ("context.json", "request.json", "schema.json", "prompt.txt"))
+                                   if p.exists()}}
         cycle["job"] = job
         cycle["jobs"].append(job)
         self.save()  # commit intent before Popen; uncertain launches are never replayed
@@ -391,6 +394,15 @@ def status_summary(config):
     state = read_json(root / "state.json")
     summary = {k: state.get(k) for k in ("status", "reason", "active_version", "started_at", "updated_at")}
     summary["cycles"] = [{k: c.get(k) for k in ("id", "phase", "status", "baseline", "candidate", "reason")} for c in state["cycles"]]
+    if "autonomous" in state:
+        autonomy = state["autonomous"]
+        summary["autonomous"] = {k: autonomy.get(k) for k in ("objective_digest", "model_calls", "validation_runs")}
+        summary["autonomous"]["latest_session"] = autonomy["latest_session"]["manifest_path"]
+        summary["autonomous"]["learning_records"] = len(autonomy["memory"])
+        if state["current"] is not None:
+            cycle = state["cycles"][state["current"]]
+            summary["autonomous"]["analysis_progress"] = {
+                "completed": cycle.get("analysis_index", 0), "total": len(cycle.get("analysis_chunks", []))}
     if "search" in state:
         search = state["search"]
         summary["search"] = {k: search.get(k) for k in ("algorithm", "metric_calls", "full_evaluations", "finalizing", "finalist", "result")}

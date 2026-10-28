@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "state_dir": "/tmp/rsi-autonomous-cpu-smoke-v1",
+  "workspace": "target",
+  "skill_source": "skill",
+  "task": "In the frozen CPU trial workspace, read the selected loader-observer skill and its notes. Create observer.py exposing wrap(loader), preserving arguments, keyword names, return-value identity and exception identity. Execute python3 protocol.py and correct observer.py if actual evidence shows a wrapper defect. Do not edit protocol.py, README.md, the selected skill, any evaluator, objective or configuration. Record the actual report.json and observer.py as evidence. Finish only after all four fixed cases pass. Use local Python standard library only; no NPU, remote hosts, network tasks or installation. Do not read prior trial workspaces, plans or candidate proposals.",
+  "allowed_paths": [
+    "notes.md"
+  ],
+  "objective": {
+    "description": "Reduce avoidable failed tool calls caused by stale observer guidance while preserving all four fixed CPU callback protocol cases. The only treatment is the skill snapshot; both trials start from the same local workspace seed. Do not count a criterion change as improvement.",
+    "gates": [
+      {
+        "id": "protocol_correct",
+        "description": "The actual observer preserves positional and loaded_weight keyword calls, return identity and the original exception across all four fixed cases. protocol.py is unchanged, and the independent operator check passes. Missing execution evidence is unknown."
+      }
+    ],
+    "metrics": [
+      {
+        "name": "failed_commands",
+        "description": "Actual failed tool calls in this trial's new raw Codex execution session, measured by the worker. Lower is better; do not fabricate a count or count historical-session failures.",
+        "direction": "minimize",
+        "source": "failed_tools",
+        "min_gain": 1,
+        "max_regression": 0,
+        "weight": 1
+      }
+    ]
+  },
+  "autonomy": {
+    "source": {
+      "path": "source-session.jsonl",
+      "format": "rollout"
+    },
+    "chunk_chars": 24000,
+    "max_model_calls": 12,
+    "max_validation_runs": 2,
+    "baseline_cache_ttl_seconds": 0,
+    "evidence_inputs": [
+      "target/protocol.py"
+    ],
+    "checks": [
+      {
+        "id": "fixed_loader_protocol",
+        "argv": [
+          "python3",
+          "-c",
+          "import hashlib, importlib.util, json, sys\nfrom pathlib import Path\nworkspace, output = map(Path, sys.argv[1:3])\nassert hashlib.sha256((workspace / 'protocol.py').read_bytes()).hexdigest() == '476d5fd2a6d57a359d24b59ffb0180517ddd66f91bb06bc7b150f88ee90ddb93', 'fixed protocol fixture changed'\nspec = importlib.util.spec_from_file_location('checked_observer', workspace / 'observer.py')\nobserver = importlib.util.module_from_spec(spec)\nspec.loader.exec_module(observer)\ncases = []\nfor name, args, kwargs, raises in [('positional', ('param', 'weights'), {}, False), ('loaded_weight_keyword', ('param',), {'loaded_weight': 'weights'}, False), ('all_keywords', (), {'param': 'param', 'loaded_weight': 'weights', 'shard_id': 3}, False), ('exception_identity', ('param',), {'loaded_weight': 'weights', 'shard_id': 7}, True)]:\n    calls, marker, failure = [], object(), ValueError('original loader failure')\n    def loader(*actual_args, **actual_kwargs):\n        calls.append((actual_args, actual_kwargs))\n        if raises:\n            raise failure\n        return marker\n    wrapped = observer.wrap(loader)\n    if raises:\n        try:\n            wrapped(*args, **kwargs)\n        except ValueError as error:\n            assert error is failure, name\n        else:\n            raise AssertionError('exception swallowed')\n    else:\n        assert wrapped(*args, **kwargs) is marker, name\n    assert calls == [(args, kwargs)], name\n    cases.append(name)\nreport = json.loads((workspace / 'report.json').read_text())\nassert report['passed'] is True and len(report['cases']) == 4\nassert all(row['passed'] is True for row in report['cases'])\nresult = {'passed': True, 'cases': cases, 'source': 'fixed operator check'}\n(output / 'operator-check.json').write_text(json.dumps(result) + '\\n')\nprint(json.dumps(result))\n",
+          "{workspace}",
+          "{output_dir}"
+        ],
+        "timeout_seconds": 20
+      }
+    ]
+  },
+  "limits": {
+    "max_cycles": 1,
+    "max_no_change_cycles": 1,
+    "max_wall_seconds": 1800,
+    "poll_seconds": 0.2,
+    "log_limit_bytes": 4194304,
+    "timeouts": {
+      "analyze": 180,
+      "plan": 180,
+      "improve": 180,
+      "run": 300,
+      "judge": 180,
+      "reflect": 180,
+      "quick": 30,
+      "checks": 30
+    }
+  }
+}

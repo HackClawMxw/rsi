@@ -55,7 +55,10 @@ def main():
                 print("Cancellation requested; inspect status before recovery.")
             return 0
         with controller_lock(root):
-            if config.get("optimizer"):
+            if config.get("autonomy"):
+                from .autonomous_controller import AutonomousController
+                controller = AutonomousController(config)
+            elif config.get("optimizer"):
                 from .search_controller import SearchController
                 controller = SearchController(config)
             else:

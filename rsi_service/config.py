@@ -33,6 +33,10 @@ def load_config(path, check_paths=True):
         a, b = Path(data["state_dir"]), Path(data[key])
         if a == b or a in b.parents or b in a.parents:
             raise ValueError("state_dir must be separate from " + key)
+    if "autonomy" in data:
+        from .autonomous_config import normalize_autonomy
+        normalize_autonomy(data, path.parent, check_paths)
+        return data
     if not isinstance(data.get("task"), str) or not data["task"].strip():
         raise ValueError("task must be nonempty")
     for name in ("allowed_paths", "protected_paths"):

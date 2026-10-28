@@ -1,6 +1,25 @@
 # RSI Lab — skill 演进外环
 
-> **当前状态**：提供离线复盘工具与可启动的 RSI circle 服务。服务支持 Codex CLI → 候选 skill → 独立验证 → 下一轮调度；真实 Day0 的改进效果尚待生产 canary 和同锚点多 run 对账验证，离线演示不能替代这些证据。
+> **当前状态**：提供离线复盘、circle/search 和原始 session 驱动的自主服务。自主模式调用 Codex 分析原始轨迹、提出假设、修改候选 skill、执行成对验证、独立审评，并将新 session 与失败反馈带入下一轮。框架行为测试与真实 Day0 改进效果分开验收；后者需要真实任务证据。
+
+## 自主服务：从原始 Codex session 开始
+
+```bash
+python3 -m rsi_service serve --config examples/autonomous/config.json
+python3 -m rsi_service status --config examples/autonomous/config.json
+```
+
+这个示例会实际调用本机已配置的 Codex 模型，运行一个有预算的本地 CPU 协议任务；它不是 NPU/Day0 验收，也不保证候选一定优于原版。需要可用的 Codex CLI 和模型连接。配置中的 `objective` 固定优化目标、指标和门禁，`autonomy.source` 指定原始 rollout 文件或准确的 session ID 与搜索目录。无需先手工写 `self-evolving.md`，也无需编写一个占位的外部 Day0 harness 才能调度模型任务。
+
+```text
+原始 session → 事件索引/原文 → 模型分析 → 改进假设 → 候选 skill
+     ↑                                               ↓
+     └── 新 session + 学习记录 ← 复盘/晋升或拒绝 ← 执行与审评
+```
+
+分析、计划、修改、执行、审评、复盘是分开的模型任务。控制器拥有预算与晋升规则；固定检查命令可为业务门禁增加机械验证。基线与候选从相同本地工作区快照开始，候选验证本身就是新一轮执行，晋升后不会为了“部署”再重复执行一次。每轮保留 `learning.json`，记录假设、比较结果、反例和下一方向。
+
+使用方式与边界见 [自主服务说明](docs/AUTONOMOUS.md)，模块划分与状态契约见 [架构设计](docs/ARCHITECTURE.md)。旧 circle/search 模式保持兼容。
 
 本仓是 AscendBot 系列 skill 的**演进基础设施**：聚合 run 证据、维护演进账本、裁决演进候选、验证 skill 变更。它**不装进目标仓、不是任何 skill 的运行时依赖**——lab 不在，skill 照常干活，只是没人记账。
 
